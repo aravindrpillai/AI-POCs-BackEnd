@@ -1,5 +1,5 @@
 import json
-from cv import constants
+from ai import constants
 from openai import OpenAI
 from cv.llm.base import CVExtractor
 from cv.schema import CVExtractResult

@@ -1,11 +1,22 @@
 from pathlib import Path
+from ai import constants
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dhc8#z+$%rxt7cu+fsk1^@n1__!%sfwbww_&_+#=#+83^hv0#g'
-DEBUG = True
 
-ALLOWED_HOSTS = ["localhost"]
-CORS_ALLOWED_ORIGINS = ["http://localhost:8080"]
+
+DEBUG = False
+
+ALLOWED_HOSTS = [
+    "aravindpillai.com", "ai-be.aravindpillai.com", 
+    "localhost", "127.0.0.1"
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://aravindpillai.com", "https://www.aravindpillai.com", 
+    "https://www.ai-be.aravindpillai.com", "https://ai-be.aravindpillai.com",
+    "http://localhost:8080", "http://127.0.0.1:8080"
+]
 
 
 INSTALLED_APPS = [
@@ -16,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cv'
+    'cv',
+    'claims'
 ]
 
 MIDDLEWARE = [
@@ -55,8 +67,19 @@ SQLLITE = {
     'NAME': BASE_DIR / 'db.sqlite3',
 }
 
+POSTGRES = {
+    "ENGINE": "django.db.backends.postgresql",
+    "NAME": constants.DB_NAME,
+    "USER": constants.DB_USERNAME,
+    "PASSWORD": constants.DB_PASSWORD,
+    "HOST": constants.DB_HOST,
+    "PORT": constants.DB_PORT,
+    "CONN_MAX_AGE": 60,
+    "OPTIONS": {"sslmode": "require"}
+}
+
 DATABASES = {
-    'default': SQLLITE
+    'default': SQLLITE if DEBUG else POSTGRES
 }
 
 

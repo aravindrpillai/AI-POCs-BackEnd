@@ -3,7 +3,7 @@ from pathlib import Path
 import zipfile
 import xml.etree.ElementTree as ET
 import pdfplumber
-from cv import constants
+from ai import constants
 
 W_NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
 
