@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'cv',
     'claims',
     'finance',
-    'chat'
+    'chat',
+    'files'
 ]
 
 MIDDLEWARE = [

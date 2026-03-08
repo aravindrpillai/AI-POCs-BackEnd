@@ -4,6 +4,8 @@ from cv.views.cv_upload_api import CVUploadAPIView
 from cv.views.cv_search_api import CVSearchAPIView
 from claims.views import ClaimsAPIView, ClaimsFileUploadView
 from finance.views import FinancialAdvisorView, FinancialAdvisorReportGenerator
+from files.views.file_api import FileAPIView
+from files.views.chat_api import ChatAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,8 @@ urlpatterns = [
     path("ai/finance/", FinancialAdvisorView.as_view()),
     path("ai/finance/<uuid:conv_id>/", FinancialAdvisorView.as_view()),
     path("ai/finance/<uuid:conv_id>/report/", FinancialAdvisorReportGenerator.as_view()),
+    
+    
+    path("ai/files/filehandler", FileAPIView.as_view()),
+    path('ai/files/chat/', ChatAPIView.as_view()),
 ]
