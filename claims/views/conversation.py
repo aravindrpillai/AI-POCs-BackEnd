@@ -50,6 +50,17 @@ class ClaimsAPIView(APIView):
         try:
             msg = (request.data.get("msg") or "").strip()
 
+            company      = request.GET.get("company")
+            email        = request.GET.get("email")
+            name         = request.GET.get("name")
+            policynumber = request.GET.get("policynumber")
+            mobile       = request.GET.get("mobile")
+
+            # Only use them if company is present (mirrors frontend logic)
+            user_info = ''
+            if company:
+                user_info = f"My name is {name}, policynumber is {policynumber}, contact number is {mobile} and email is {email}"
+             
             # ── Init: create conversation and return conv_id ───────────────
             if not msg or msg == "__init__":
                 conv = ClaimService.create_conversation()
@@ -57,9 +68,9 @@ class ClaimsAPIView(APIView):
                     {"conv_id": str(conv.uid)},
                     status=status.HTTP_200_OK
                 )
-
-            prompt = PromptReader.get("claimsprompt.txt", variables={"__today__": date.today().isoformat()})
-
+            
+            prompt = PromptReader.get("claimsprompt.txt", variables={"__today__": date.today().isoformat(), "__user_info__" : user_info})
+            
             # ── 1. Get or create conversation ──────────────────────────────
             if conv_id:
                 conv = ClaimService.get_conversation(conv_id)

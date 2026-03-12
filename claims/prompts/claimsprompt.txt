@@ -360,3 +360,6 @@ ONLY JSON. No extra text. No markdown. No code fences.
     "ai_images": []
   }
 }
+
+
+{{__user_info__}}
