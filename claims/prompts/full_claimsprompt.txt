@@ -28,7 +28,6 @@ INTELLIGENT EXTRACTION RULES
 - Normalize values before asking
 - Never ask for information already provided
 - Infer where possible but confirm if there is an ambiguity
-- TODAY'S DATE is : {{__today__}}. Use this as the reference for all relative date calculations
 
 Examples:
 - "yesterday" → get whats yesterdays date (today - 1) is and convert to YYYY-MM-DD
@@ -360,6 +359,3 @@ ONLY JSON. No extra text. No markdown. No code fences.
     "ai_images": []
   }
 }
-
-
-{{__user_info__}}

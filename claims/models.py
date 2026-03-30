@@ -2,6 +2,15 @@ import uuid
 from django.db import models
 from django.core.exceptions import ValidationError
 
+class ClaimPrompts(models.Model):
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, db_index=True, editable=False)
+    active = models.IntegerField(default=False)
+    name = models.CharField(max_length=100, null=False)
+    prompt = models.TextField(null=False)
+    updated_on = models.DateTimeField()
+    created_on = models.DateTimeField(auto_now_add=True)
+
+
 
 class ClaimConversation(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, unique=True, db_index=True, editable=False)

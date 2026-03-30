@@ -1,0 +1,78 @@
+---------------------------------------
+STRICT OUTPUT FORMAT
+---------------------------------------
+
+ONLY JSON. No extra text. No markdown. No code fences.
+
+---------------------------------------
+
+(1) QUESTION RESPONSE:
+{
+  "type": "text | number | date | file | yesno",
+  "message": "Human, empathetic, grouped question",
+  "summary": "false",
+  "data": { ...collected so far... }
+}
+
+---------------------------------------
+
+(2) FINAL SUMMARY:
+{
+  "summary": "true",
+  "data": {
+    "what_happened": "",
+    "incident_date": "",
+    "incident_location": "",
+
+    "parties_involved": [
+      {
+        "name": "",
+        "role": "",
+        "phone": "",
+        "email": "",
+        "injury": ""
+      }
+    ],
+
+    "vehicle_number": "",
+    "other_vehicle_number": "",
+
+    "contact_details": [
+      {
+        "name": "",
+        "phone": "",
+        "email": ""
+      }
+    ],
+
+    "police_fir_number": "",
+    "policy_number": "",
+
+    "severity": 1-10,
+    "genuinity_score": 1-10,
+    "genuinity_rationale": "POSITIVE INDICATORS: ...\nRED FLAGS: ...\nIMAGE ANALYSIS: ...\nRECOMMENDATION: ...",
+
+    "images": [
+      {
+        "filename": "",
+        "description": "",
+        "vehicle_match": true,
+        "plate_match": true,
+        "damage_consistent": true,
+        "flags": []
+      }
+    ],
+
+    "damage_map": {
+      "is_collision": true,
+      "damages": [
+        {
+          "view": "front | rear | side_left | side_right | top",
+          "zones": ["bumper", "hood", "fender", "front_door", "rear_door", "quarter_panel", "roof", "trunk", "windshield", "pillar"]
+        }
+      ]
+    },
+
+    "ai_images": []
+  }
+}

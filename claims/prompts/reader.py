@@ -1,68 +1,31 @@
 from __future__ import annotations
 from datetime import date
-from pathlib import Path
-from threading import RLock
-from typing import Dict, Any, Optional
-
-
-def _default_variables() -> Dict[str, Any]:
-    """Variables that are always injected dynamically (never cached)."""
-    return {
-        "__today__": date.today().isoformat(),
-    }
-
+from claims.models import ClaimPrompts
+from django.conf import settings
 
 class PromptReader:
 
-    _lock: RLock = RLock()
-    _cache: Dict[str, str] = {}  # Stores raw template text only
+    @staticmethod
+    def get(additional_info = None) -> str:
+        # First try to get active prompt
+        prompt_obj = ClaimPrompts.objects.filter(active=1).order_by("-updated_on").first()
 
-    @classmethod
-    def _prompts_dir(cls) -> Path:
-        return Path(__file__).resolve().parent
+        # If no active prompt, get latest record
+        if not prompt_obj:
+            prompt_obj = ClaimPrompts.objects.order_by("-created_on").first()
 
-    @classmethod
-    def get(
-        cls,
-        filename: str,
-        *,
-        variables: Optional[Dict[str, Any]] = None,
-        force_reload: bool = False,
-    ) -> str:
-        if not filename or not isinstance(filename, str):
-            raise ValueError("Prompt filename must be a non-empty string.")
+        if not prompt_obj:
+            raise ValueError("No prompt records found in ClaimPrompts table.")
 
-        key = filename.strip().replace("\\", "/")
+        today = f'TODAY\'S DATE is : {date.today().isoformat()}. Use this as the reference for all relative date calculations'
+        prompt = (prompt_obj.prompt or "").strip()
+        structure= ""
+        with open(f"{settings.BASE_DIR}/claims/prompts/structure.txt", "r", encoding="utf-8") as f:
+            structure = f.read()
 
-        with cls._lock:
-            if force_reload or key not in cls._cache:
-                prompt_path = cls._prompts_dir() / key
-                if not prompt_path.exists():
-                    raise FileNotFoundError(f"Prompt not found: {prompt_path}")
+        final_prompt = f"{today}\n{prompt}\n{structure}"
+        
+        if(additional_info):
+            final_prompt = final_prompt + "\n" + additional_info
 
-                text = prompt_path.read_text(encoding="utf-8").strip()
-                if not text:
-                    raise ValueError(f"Prompt file is empty: {prompt_path}")
-
-                cls._cache[key] = text  # Cache raw template only
-
-            raw_template = cls._cache[key]
-
-        # Always resolve dynamic variables fresh (never cached)
-        merged = _default_variables()
-        if variables:
-            merged.update(variables)
-
-        return cls._render(raw_template, merged)
-
-    @classmethod
-    def _render(cls, template: str, variables: Dict[str, Any]) -> str:
-        """Replace {{key}} placeholders with variable values."""
-        for key, value in variables.items():
-            template = template.replace(f"{{{{{key}}}}}", str(value))
-        return template
-
-    @classmethod
-    def clear_cache(cls) -> None:
-        with cls._lock:
-            cls._cache.clear()
+        return final_prompt
